@@ -56,4 +56,5 @@ pub enum Runtime {
     #[default]
     Amqp,
     InMemory,
+    Pubsub,
 }

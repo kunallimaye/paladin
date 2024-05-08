@@ -10,7 +10,7 @@
 //! the available implementations, which dynamically delegate to the appropriate
 //! implementation.
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Ok, Result};
 use async_trait::async_trait;
 use futures::{Stream, StreamExt};
 use uuid::Uuid;
@@ -139,6 +139,11 @@ impl DynamicChannelFactory {
                 Ok(DynamicChannelFactory::Amqp(channel_factory))
             }
             config::Runtime::InMemory => {
+                let channel_factory = QueueChannelFactory::new(InMemoryConnection::new(serializer));
+                Ok(DynamicChannelFactory::InMemory(channel_factory))
+            }
+            config::Runtime::Pubsub => {
+                //TODO: move to using Pubsub
                 let channel_factory = QueueChannelFactory::new(InMemoryConnection::new(serializer));
                 Ok(DynamicChannelFactory::InMemory(channel_factory))
             }
